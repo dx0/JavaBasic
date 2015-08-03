@@ -1,0 +1,97 @@
+package com.jih;
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class MergeSort {
+
+    private int[] mergeArray;
+    private int[] temporaryArray;
+
+    public static void main(String[] args) {
+
+        MergeSort mrMerge = new MergeSort();
+
+        int[] arrayToMerge = mrMerge.createRandomArray(mrMerge.getLenght());
+
+        mrMerge.displayCreatedArray(arrayToMerge);
+
+        mrMerge.inputsData(arrayToMerge);
+
+        mrMerge.displaySortedArray(arrayToMerge);
+    }
+    
+    private int getLenght() {
+    	System.out.println("Hi! Enter length of mergeArray: ");
+    	return new Scanner(System.in).nextInt();
+    }
+
+    public int[] createRandomArray(int length) {        
+        Random random = new Random();
+        int[] arrayResult = new int[length];
+        int maxNumber = length + 100;
+
+        for (int i = 0; i < length; i++) {
+            arrayResult[i] = random.nextInt(maxNumber);
+        }
+        return arrayResult;   
+    }    
+
+    public void displayCreatedArray(int[] inputArray) {
+        System.out.print("Generated array is: ");
+        for (int baseArray : inputArray) {
+            System.out.print(baseArray + " ");
+        }
+        System.out.println("\n");
+    }
+
+    public void inputsData(int inputArr[]) {
+        mergeArray = inputArr;
+        temporaryArray = new int[inputArr.length];
+        divideArray(0, temporaryArray.length - 1);
+    }
+
+    private void divideArray(int leftBound, int rihgtBound) {
+
+        if (leftBound < rihgtBound) {
+            int middleOfArray = leftBound + ((rihgtBound - leftBound) / 2);
+            divideArray(leftBound, middleOfArray);
+            divideArray(middleOfArray + 1, rihgtBound);
+            SortAndCombineArrayParts(leftBound, middleOfArray, rihgtBound);
+        }
+    }
+
+    private void SortAndCombineArrayParts(int leftIndex, int middleOfArray, int rightIndex) {
+
+        for (int i = leftIndex; i <= rightIndex; i++) {
+            temporaryArray[i] = mergeArray[i];
+        }
+        int minTemporaryIndex = leftIndex;
+        int middleIndex = middleOfArray + 1;
+        int minMergeArrayIndex = leftIndex;
+        while (minTemporaryIndex <= middleOfArray && middleIndex <= rightIndex) {
+
+            if (temporaryArray[minTemporaryIndex] <= temporaryArray[middleIndex]) {
+                mergeArray[minMergeArrayIndex] = temporaryArray[minTemporaryIndex];
+                minTemporaryIndex++;
+            } else {
+                mergeArray[minMergeArrayIndex] = temporaryArray[middleIndex];
+                middleIndex++;
+            }
+            minMergeArrayIndex++;
+        }
+
+        while (minTemporaryIndex <= middleOfArray) {
+            mergeArray[minMergeArrayIndex] = temporaryArray[minTemporaryIndex];
+            minMergeArrayIndex++;
+            minTemporaryIndex++;
+        }
+    }
+
+    public void displaySortedArray(int[] inputArray) {
+        System.out.print("Sorted array is: ");
+        for (int showMagic : inputArray) {
+            System.out.print(showMagic + " ");
+        }
+    }
+}
